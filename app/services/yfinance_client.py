@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from ..db import models, crud
 import logging
+from sqlalchemy import and_
 
 logger = logging.getLogger(__name__)
 
