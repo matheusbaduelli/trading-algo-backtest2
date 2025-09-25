@@ -49,6 +49,7 @@ async def run_backtest_endpoint(
         # Run backtest asynchronously (in real implementation, use Celery or similar)
         asyncio.create_task(execute_backtest(backtest.id, request, db))
         
+        
         return schemas.BacktestRunResponse(
             id=backtest.id,
             status="running"
