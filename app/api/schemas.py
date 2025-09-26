@@ -8,7 +8,7 @@ class StrategyType(str, Enum):
     SMA_CROSS = "sma_cross"
     DONCHIAN_BREAKOUT = "donchian_breakout"
     MOMENTUM = "momentum"
-    ATR_BREAKOUT = "atr_breakout"
+    
 
 class BacktestRunRequest(BaseModel):
     ticker: str = Field(..., description="Ticker symbol (e.g., PETR4.SA)")
