@@ -5,6 +5,17 @@ from sqlalchemy import pool
 
 from alembic import context
 
+import os
+import sys
+
+# Forçar codificação UTF-8
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+if sys.platform == 'win32':
+    import codecs
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
+
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

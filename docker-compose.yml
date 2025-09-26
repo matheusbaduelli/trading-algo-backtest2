@@ -3,8 +3,8 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_DB: trading_db
-      POSTGRES_USER: trading_user
+      POSTGRES_DB: tradingdb
+      POSTGRES_USER: tradinguser
       POSTGRES_PASSWORD: trading_pass
     ports:
       - "5432:5432"
@@ -18,7 +18,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: postgresql://trading_user:trading_pass@postgres:5432/trading_db
+      DATABASE_URL: postgresql://tradinguser:trading_pass@postgres:5432/tradingdb
       PYTHONPATH: /app
     volumes:
       - ./:/app
