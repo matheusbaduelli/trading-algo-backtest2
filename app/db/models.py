@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, Date, Float, Text, DateTime, ForeignKey, UniqueConstraint
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-Base = declarative_base()
+# ✅ CORREÇÃO CRÍTICA: Importar Base do base.py (não criar nova instância)
+from .base import Base
 
 class Symbol(Base):
     __tablename__ = 'symbols'
@@ -102,4 +102,3 @@ class JobRun(Base):
     finished_at = Column(DateTime)
     status = Column(String)
     message = Column(Text)
-
