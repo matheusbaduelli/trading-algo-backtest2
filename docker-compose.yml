@@ -1,16 +1,16 @@
 
 services:
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     environment:
       POSTGRES_DB: tradingdb
-      POSTGRES_USER: tradinguser
+      POSTGRES_USER: tradinguser  
       POSTGRES_PASSWORD: trading_pass
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+      
   app:
     build: .
     ports:
@@ -19,9 +19,6 @@ services:
       - postgres
     environment:
       DATABASE_URL: postgresql://tradinguser:trading_pass@postgres:5432/tradingdb
-      PYTHONPATH: /app
-    volumes:
-      - ./:/app
-
+      
 volumes:
   postgres_data:
