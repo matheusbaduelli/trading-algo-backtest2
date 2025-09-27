@@ -23,9 +23,9 @@ Requisitos: Python 3.11+, pip
 
 ## Endpoints principais
 - `POST /backtests/run` — roda um backtest simples (SMA crossover)
-- `GET  /backtests/{id}/results` — obtém resultado salvo do backtest (em DB SQLite)
+- `GET  /backtests/{id}/results` — obtém resultado salvo do backtest (em Postgres)
 - `GET  /health` — ok
 
 ## Notas
-- Banco usado: SQLite (arquivo `data/app.db`) para facilitar execução local.
+- Banco usado: Postgres (arquivo `app.db`) para facilitar execução local.
 - Backtest engine implementado de forma simples em `app/core/backtest_engine.py` (pandas).

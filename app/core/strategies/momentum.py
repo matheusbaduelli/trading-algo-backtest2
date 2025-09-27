@@ -15,15 +15,15 @@ class MomentumStrategy(BaseStrategy):
         self.returns_history = []
         
     def strategy_logic(self):
-        # Build returns history for percentile calculation
-        if len(self.returns_history) >= 252:  # Keep 1 year of history
+        
+        if len(self.returns_history) >= 252:  
             self.returns_history.pop(0)
         self.returns_history.append(self.returns[0])
         
         if len(self.returns_history) < 60:
             return
             
-        # Calculate percentile threshold
+        
         sorted_returns = sorted(self.returns_history)
         threshold_idx = int(len(sorted_returns) * self.params.percentile_threshold / 100)
         threshold = sorted_returns[threshold_idx]

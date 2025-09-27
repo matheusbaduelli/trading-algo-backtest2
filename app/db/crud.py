@@ -28,7 +28,7 @@ def update_backtest_status(db: Session, backtest_id: int, status: str, message: 
     if backtest:
         backtest.status = status
         if message:
-            # Armazenar mensagem em campo adicional se necessário
+           
             pass
         db.commit()
         return backtest
@@ -37,7 +37,7 @@ def update_backtest_status(db: Session, backtest_id: int, status: str, message: 
 def store_backtest_results(db: Session, backtest_id: int, results: dict):
     """Armazenar resultados completos do backtest"""
     
-    # Salvar trades
+    
     for trade_data in results.get('trades', []):
         trade = models.Trade(
             backtest_id=backtest_id,
@@ -50,7 +50,7 @@ def store_backtest_results(db: Session, backtest_id: int, results: dict):
         )
         db.add(trade)
     
-    # Salvar posições diárias
+    
     for pos_data in results.get('daily_positions', []):
         position = models.DailyPosition(
             backtest_id=backtest_id,
@@ -62,7 +62,7 @@ def store_backtest_results(db: Session, backtest_id: int, results: dict):
         )
         db.add(position)
     
-    # Salvar métricas
+   
     metrics = models.Metrics(
         backtest_id=backtest_id,
         total_return=results.get('total_return', 0),

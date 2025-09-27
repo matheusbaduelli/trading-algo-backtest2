@@ -7,7 +7,7 @@ from .strategies.donchian import DonchianBreakoutStrategy
 from .strategies.momentum import MomentumStrategy
 
 STRATEGY_MAP = {
-    'sma_cross': SMAStrategy,  # NOME CORRIGIDO
+    'sma_cross': SMAStrategy,  
     'donchian_breakout': DonchianBreakoutStrategy,
     'momentum': MomentumStrategy
 }

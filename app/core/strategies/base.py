@@ -27,16 +27,16 @@ class BaseStrategy(bt.Strategy, ABC):
             })
     
     def next(self):
-        # Record daily position
+        
         self.daily_positions.append({
             'date': self.datas[0].datetime.date(0),
             'position_size': self.position.size,
             'cash': self.broker.get_cash(),
             'equity': self.broker.get_value(),
-            'drawdown': 0.0  # Will be calculated later
+            'drawdown': 0.0  
         })
         
-        # Call strategy-specific logic
+        
         self.strategy_logic()
     
     @abstractmethod
@@ -46,7 +46,7 @@ class BaseStrategy(bt.Strategy, ABC):
     
     def calculate_position_size(self, price: float, stop_price: float) -> int:
         """Calculate position size based on 1% risk rule"""
-        risk_per_trade = self.broker.get_value() * 0.01  # 1% of total capital
+        risk_per_trade = self.broker.get_value() * 0.01 
         risk_per_share = abs(price - stop_price)
         if risk_per_share == 0:
             return 0

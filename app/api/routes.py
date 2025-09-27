@@ -34,7 +34,7 @@ async def run_backtest_endpoint(
     db: Session = Depends(get_db)
 ):
     try:
-        # Create backtest record
+        
         backtest = crud.create_backtest(db, {
             "ticker": request.ticker,
             "start_date": request.start_date,
@@ -46,7 +46,7 @@ async def run_backtest_endpoint(
             "status": "running"
         })
         
-        # Run backtest asynchronously (in real implementation, use Celery or similar)
+        
         asyncio.create_task(execute_backtest(backtest.id, request, db))
         
         
@@ -61,14 +61,14 @@ async def run_backtest_endpoint(
 async def execute_backtest(backtest_id: int, request: schemas.BacktestRunRequest, db: Session):
     """Execute backtest asynchronously"""
     try:
-        # Download data
+        
         df = await download_and_store_data(request.ticker, request.start_date, request.end_date, db)
         
         if df is None or df.empty:
             crud.update_backtest_status(db, backtest_id, "failed", "No data found")
             return
         
-        # Run backtest
+        
         results = run_backtest(
             df, 
             request.strategy_type, 
@@ -77,7 +77,7 @@ async def execute_backtest(backtest_id: int, request: schemas.BacktestRunRequest
             request.commission
         )
         
-        # Store results
+        
         crud.store_backtest_results(db, backtest_id, results)
         crud.update_backtest_status(db, backtest_id, "completed")
         
@@ -94,7 +94,7 @@ def get_backtest_results(backtest_id: int, db: Session = Depends(get_db)):
     if backtest.status != "completed":
         raise HTTPException(400, f"Backtest status: {backtest.status}")
     
-    # Calculate drawdown for daily positions
+    
     daily_positions = calculate_drawdown_series([pos.equity for pos in backtest.daily_positions])
     
     return schemas.BacktestResultResponse(
@@ -167,11 +167,11 @@ async def update_indicators(
 ):
     """Forçar atualização de indicadores para um ticker"""
     try:
-        # Buscar dados mais recentes (últimos 30 dias para recalcular)
+        
         end_date = datetime.now().date()
         start_date = end_date - timedelta(days=30)
         
-        # Download e armazenamento
+        
         df = await download_and_store_data(
             request.ticker, 
             start_date.isoformat(), 

@@ -11,26 +11,26 @@ logger = logging.getLogger(__name__)
 async def download_and_store_data(ticker: str, start_date: str, end_date: str, db: Session) -> pd.DataFrame:
     """Download de dados do Yahoo Finance e armazenamento no banco"""
     try:
-        # Download dos dados
+        
         df = yf.download(ticker, start=start_date, end=end_date, progress=False)
         
         if df.empty:
             logger.warning(f"No data found for {ticker}")
             return None
         
-        # Garantir que temos as colunas necessárias
+        
         required_columns = ['Open', 'High', 'Low', 'Close', 'Volume']
         for col in required_columns:
             if col not in df.columns:
                 logger.error(f"Missing column {col} for {ticker}")
                 return None
         
-        # Verificar/criar símbolo no banco
+        
         symbol = db.query(models.Symbol).filter(models.Symbol.ticker == ticker).first()
         if not symbol:
             symbol = models.Symbol(
                 ticker=ticker,
-                name=ticker,  # Pode ser melhorado com dados adicionais
+                name=ticker,  
                 exchange="UNKNOWN",
                 currency="USD"
             )
@@ -38,9 +38,9 @@ async def download_and_store_data(ticker: str, start_date: str, end_date: str, d
             db.commit()
             db.refresh(symbol)
         
-        # Armazenar dados de preços
+        
         for date, row in df.iterrows():
-            # Verificar se já existe
+            
             existing = db.query(models.Price).filter(
                 and_(models.Price.symbol_id == symbol.id, 
                      models.Price.date == date.date())
@@ -60,7 +60,7 @@ async def download_and_store_data(ticker: str, start_date: str, end_date: str, d
         
         db.commit()
         
-        # Calcular e armazenar indicadores
+        
         await calculate_and_store_indicators(symbol.id, df, db)
         
         logger.info(f"Successfully stored data for {ticker}: {len(df)} records")
@@ -73,22 +73,22 @@ async def download_and_store_data(ticker: str, start_date: str, end_date: str, d
 async def calculate_and_store_indicators(symbol_id: int, df: pd.DataFrame, db: Session):
     """Calcular e armazenar indicadores técnicos"""
     try:
-        # SMA 20 e 50
+       
         df['SMA_20'] = df['Close'].rolling(window=20).mean()
         df['SMA_50'] = df['Close'].rolling(window=50).mean()
         df['SMA_200'] = df['Close'].rolling(window=200).mean()
         
-        # ATR
+        
         df['TR'] = df[['High', 'Low', 'Close']].apply(
             lambda x: max(x['High'] - x['Low'], 
                          abs(x['High'] - x['Close']), 
                          abs(x['Low'] - x['Close'])), axis=1)
         df['ATR_14'] = df['TR'].rolling(window=14).mean()
         
-        # ROC (Rate of Change)
+        
         df['ROC_60'] = df['Close'].pct_change(periods=60)
         
-        # Armazenar indicadores
+        
         indicators_to_store = [
             ('SMA', df['SMA_20'], '{"period": 20}'),
             ('SMA', df['SMA_50'], '{"period": 50}'),

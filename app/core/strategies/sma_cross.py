@@ -1,7 +1,7 @@
 import backtrader as bt
 from .base import BaseStrategy
 
-class SMAStrategy(BaseStrategy):  # NOME CORRIGIDO
+class SMAStrategy(BaseStrategy): 
     """Estratégia de cruzamento de médias móveis simples"""
     params = (
         ('fast', 20),
@@ -19,9 +19,9 @@ class SMAStrategy(BaseStrategy):  # NOME CORRIGIDO
         
     def strategy_logic(self):
         if not self.position:
-            if self.crossover > 0:  # Fast crosses above slow
+            if self.crossover > 0:
                 current_price = self.data.close[0]
-                stop_price = current_price - (2 * self.atr[0])  # ATR-based stop
+                stop_price = current_price - (2 * self.atr[0])
                 size = self.calculate_position_size(current_price, stop_price)
                 if size > 0:
                     self.buy(size=size)
